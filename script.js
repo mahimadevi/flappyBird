@@ -9,7 +9,9 @@ let birdWidth = 34; //width/height ratio = 408/228 = 17/12
 let birdHeight = 24;
 let birdX = boardWidth / 8;
 let birdY = boardHeight / 2;
-let birdImg;
+// let birdImg;
+let birdImgs = [];
+let birdImgsIndex = 0;
 
 let bird = {
   x: birdX,
@@ -52,11 +54,17 @@ window.onload = function () {
   // context.fillRect(bird.x, bird.y, bird.width, bird.height);
 
   //load images
-  birdImg = new Image();
-  birdImg.src = "./flappybird.png";
-  birdImg.onload = function () {
-    context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
-  };
+  // birdImg = new Image();
+  // birdImg.src = "./flappybird.png";
+  // birdImg.onload = function () {
+  //   context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
+  // };
+
+  for (let i = 0; i < 4; i++) {
+    let birdImg = new Image();
+    birdImg.src = `./flappybird${i}.png`;
+    birdImgs.push(birdImg);
+  }
 
   topPipeImg = new Image();
   topPipeImg.src = "./toppipe.png";
@@ -80,7 +88,16 @@ function update() {
   velocityY += gravity;
   // bird.y += velocityY;
   bird.y = Math.max(bird.y + velocityY, 0); //apply gravity to current bird.y, limit the bird.y to top of the canvas
-  context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
+  // context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
+  context.drawImage(
+    birdImgs[birdImgsIndex],
+    bird.x,
+    bird.y,
+    bird.width,
+    bird.height
+  );
+  birdImgsIndex++; //increment to next frame
+  birdImgsIndex %= birdImgs.length; //circle back with modulus,  max frames is 4
 
   if (bird.y > board.height) {
     gameOver = true;
